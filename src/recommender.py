@@ -1,5 +1,7 @@
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
+import csv
+
 
 @dataclass
 class Song:
@@ -18,6 +20,7 @@ class Song:
     danceability: float
     acousticness: float
 
+
 @dataclass
 class UserProfile:
     """
@@ -29,11 +32,13 @@ class UserProfile:
     target_energy: float
     likes_acoustic: bool
 
+
 class Recommender:
     """
     OOP implementation of the recommendation logic.
     Required by tests/test_recommender.py
     """
+
     def __init__(self, songs: List[Song]):
         self.songs = songs
 
@@ -45,14 +50,19 @@ class Recommender:
         # TODO: Implement explanation logic
         return "Explanation placeholder"
 
+
 def load_songs(csv_path: str) -> List[Dict]:
     """
     Loads songs from a CSV file.
     Required by src/main.py
     """
-    # TODO: Implement CSV loading logic
-    print(f"Loading songs from {csv_path}...")
-    return []
+    songs: List[Dict] = []
+    with open(csv_path, mode="r", newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            songs.append(dict(row))
+    return songs
+
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
     """
