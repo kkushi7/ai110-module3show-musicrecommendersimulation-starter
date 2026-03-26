@@ -22,8 +22,9 @@ Explain your design in plain language.
 Some prompts to answer:
 
 - What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
+    Genre, mood, energy, tempo
 - What information does your `UserProfile` store
+    favorite genre, favorite mood, favorite artists, emotional state
 - How does your `Recommender` compute a score for each song
 - How do you choose which songs to recommend
 
