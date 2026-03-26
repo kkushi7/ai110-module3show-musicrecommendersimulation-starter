@@ -3,6 +3,11 @@ from dataclasses import dataclass
 import csv
 
 
+GENRE_MATCH_POINTS = 2.0
+MOOD_MATCH_POINTS = 1.0
+MAX_ENERGY_POINTS = 1.5
+
+
 @dataclass
 class Song:
     """
@@ -64,11 +69,58 @@ def load_songs(csv_path: str) -> List[Dict]:
     return songs
 
 
+def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
+    """
+    Scores a song based on a simple weighted recipe and returns human-readable reasons.
+
+    Recipe:
+    - +2.0 for genre match
+    - +1.0 for mood match
+    - Up to +1.5 for energy closeness
+      energy_similarity = 1 - abs(song_energy - target_energy)
+      energy_points = 1.5 * energy_similarity
+    """
+    score = 0.0
+    reasons: List[str] = []
+
+    user_genre = str(user_prefs.get("genre", "")).strip().lower()
+    song_genre = str(song.get("genre", "")).strip().lower()
+    if user_genre and song_genre == user_genre:
+        score += GENRE_MATCH_POINTS
+        reasons.append(f"genre match (+{GENRE_MATCH_POINTS:.1f})")
+
+    user_mood = str(user_prefs.get("mood", "")).strip().lower()
+    song_mood = str(song.get("mood", "")).strip().lower()
+    if user_mood and song_mood == user_mood:
+        score += MOOD_MATCH_POINTS
+        reasons.append(f"mood match (+{MOOD_MATCH_POINTS:.1f})")
+
+    try:
+        target_energy = float(user_prefs.get("energy", 0.0))
+        song_energy = float(song.get("energy", 0.0))
+    except (TypeError, ValueError):
+        target_energy = 0.0
+        song_energy = 0.0
+
+    energy_similarity = 1.0 - abs(song_energy - target_energy)
+    energy_similarity = max(0.0, min(1.0, energy_similarity))
+    energy_points = MAX_ENERGY_POINTS * energy_similarity
+    score += energy_points
+    reasons.append(f"energy close match (+{energy_points:.2f})")
+
+    return score, reasons
+
+
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
     """
     Functional implementation of the recommendation logic.
     Required by src/main.py
     """
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
-    return []
+    scored: List[Tuple[Dict, float, str]] = []
+    for song in songs:
+        score, reasons = score_song(user_prefs, song)
+        explanation = ", ".join(reasons)
+        scored.append((song, score, explanation))
+
+    scored.sort(key=lambda item: item[1], reverse=True)
+    return scored[:k]
