@@ -87,6 +87,14 @@ Prompts:
 
 No need for numeric metrics unless you created some.
 
+I tested five different user profiles to evaluate how the system behaves:
+- High-Energy Pop — someone who wants happy, upbeat pop music (energy: 0.9)
+- Chill Lofi — someone who wants relaxing, focused lofi tracks (energy: 0.35)
+- Deep Intense Rock — someone who wants intense, energetic rock (energy: 0.95)
+- Edge Case: Sad But High Energy — someone with conflicting preferences (pop + sad + high energy)
+- Edge Case: Unknown Genre — someone asking for a genre not in the catalog (opera)
+
+The biggest surprise was why "Gym Hero" kept showing up for the "Happy Pop" user, even though "Gym Hero" has the mood "intense," not "happy." At first this seemed like a bug, but then I realized the problem: "Gym Hero" has an energy level of 0.93, which is almost perfect for a user targeting 0.9. Because my scoring gives energy closeness a weight of 3.0,  compared to only 1.0 for mood, the system rewards the near-perfect energy match so heavily that it outweighs the mood mismatch. So a user just looking for happy pop gets a song called "Gym Hero" that is intense and pumped-up, even though the vibe is totally different. It's like the recommender is saying, "You want pop + happy + high energy, and here's a song with pop + high energy, so close enough!" — but it misses that the actual feeling is wrong. This showed me that my system can accidentally ignore what the user actually feels when their preference for energy is strong.
 ---
 
 ## 8. Future Work  
