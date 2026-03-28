@@ -70,6 +70,8 @@ Prompts:
 - Cases where the system overfits to one preference  
 - Ways the scoring might unintentionally favor some users  
 
+    My current scoring logic can create a filter bubble around energy level because energy closeness is weighted much more heavily than genre or mood matches. A song with very close energy to the user's target can outrank a song that better matches their genre or mood preference, which means users get pulled into one energy band repeatedly. Additionally, the system uses exact string matching for genre and mood, so related concepts like "sad" and "melancholic" are treated as completely different, and users with rare or missing genres in the catalog fall back to energy-based recommendations only. Finally, some stored user preferences like likes_acoustic are ignored entirely by the scoring logic, making personalization incomplete for users who care about sound texture or instrumentation.
+
 ---
 
 ## 7. Evaluation  
