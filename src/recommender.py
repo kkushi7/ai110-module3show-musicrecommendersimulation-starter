@@ -3,9 +3,9 @@ from dataclasses import dataclass
 import csv
 
 
-GENRE_MATCH_POINTS = 2.0
+GENRE_MATCH_POINTS = 1.0
 MOOD_MATCH_POINTS = 1.0
-MAX_ENERGY_POINTS = 1.5
+MAX_ENERGY_POINTS = 3.0
 
 
 @dataclass
@@ -74,11 +74,11 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     Scores a song based on a simple weighted recipe and returns human-readable reasons.
 
     Recipe:
-    - +2.0 for genre match
+        - +1.0 for genre match
     - +1.0 for mood match
-    - Up to +1.5 for energy closeness
+        - Up to +3.0 for energy closeness
       energy_similarity = 1 - abs(song_energy - target_energy)
-      energy_points = 1.5 * energy_similarity
+            energy_points = 3.0 * energy_similarity
     """
     score = 0.0
     reasons: List[str] = []
