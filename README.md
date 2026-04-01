@@ -210,3 +210,4 @@ A few sentences about what you learned:
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
 
+My biggest learning moment during this project was realizing that recommendation systems are shaped by the choices behind the scoring rules, not just by the code itself. AI tools helped me brainstorm ideas and improve how I explained my system, but I still had to double check their suggestions against my actual scoring logic and tests. What surprised me most was that even a simple algorithm using genre, mood, and energy could still feel personal, because these features match how people describe music. If I extended this project, I would add more features like danceability or valence and try making the recommendations more diverse instead of always choosing the closest matches.
